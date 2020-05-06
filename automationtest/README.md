@@ -25,16 +25,16 @@
  npm test
 ```
 ## Register.js function compiles on fly
-With the Register.js function which is added in protractor.conf.js file, we no longer have to complie the TypeScript files as it has ts-node wich complies them on fly
+With the Register.js function which is added in protractor.conf.js file, we no longer have to compile the TypeScript files as it has ts-node which compile them on fly
 
 ***Feature File***
-* Place where all the scenario are written is Cucumber BDD Framework, we can Tag the scenario with @TagName to run a specfic scenario or Test Case.The Tag needs to be passed in the config file under cucumberOpts
+* Place where all the scenario/Test Cases are written is Cucumber BDD Framework, we can Tag the scenario with @TagName to run a specfic scenario or Test Case.The Tag needs to be passed in the config file under cucumberOpts
 
 ***Steps Defination***
 * All the steps are defined in this file.It uses protractor to integrate with the browser and to do browser actions.
 
 ***Assertion***
-Framework uses chai as Assertion library to perfrom all assertion related operations
+This Framework uses Chai as Assertion library to perfrom all assertion related operations
 
 ***Page Objects***
 All the page locators are defined in Page object file.
@@ -43,7 +43,7 @@ All the page locators are defined in Page object file.
 All the browser related action such as click(),wait()etc are kept separted in the function files.Which can be used to do browser actions
 
 ***Cucumber Hooks***
-* Cucumber has Before and AFter Feature as Hooks which helps to do activites during start and end of the test.
+* Cucumber has Before and AFter as Hooks which helps to do activites during start and end of the test.
 * As of now for any failed scenarios, screenshot will be taken on Failures which will be Performed in After Hooks
 * Before Hooks just maxmise the browser and set the waitForAngularEnabled to TRUE which means it will wait for Angular tasks to complete before interacting with the browser.
 
