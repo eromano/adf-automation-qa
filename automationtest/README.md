@@ -2,8 +2,8 @@
 
  ***Prerequisites***
 
- 1.NodeJS needs to be installed globally in the system
- 2.Chrome Browser installed
+ * NodeJS needs to be installed globally in the system
+ * Chrome Browser installed
 
  ***Setup Scripts***
 
@@ -24,7 +24,7 @@
 ```
  npm test
 ```
-* Register.js function complies on fly
+## Register.js function compiles on fly
 With the Register.js function which is added in protractor.conf.js file, we no longer have to complie the TypeScript files as it has ts-node wich complies them on fly
 
 ***Feature File***
