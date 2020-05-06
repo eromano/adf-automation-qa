@@ -86,6 +86,13 @@ class TestSteps {
 
   @when(/^User selects the action button for created username "(.*)"$/)
   public async clickOnActionBtn(userName: string) {
+    if (
+      !(await testFunction.enabled(filesPage.previousArrowBtn)) &&
+      !(await testFunction.enabled(filesPage.nextArrowBtn))
+    ) {
+      await this.clickOnDeleteActionBtnForUser(userName);
+    }
+
     while (await testFunction.enabled(filesPage.previousArrowBtn)) {
       console.log("click on previous button");
       let user = await this.getDisplayNameFromList();
@@ -182,6 +189,19 @@ class TestSteps {
       listOfValues.push(val);
     }
     return listOfValues;
+  }
+
+  // Function to Click on Delete Action Button of a Specific User
+  public async clickOnDeleteActionBtnForUser(userName: string): Promise<any> {
+    let user = await this.getDisplayNameFromList();
+    if (user.includes(userName)) {
+      console.log("Found the user");
+      await element(
+        by.xpath(
+          `.//*[contains(@data-automation-id,'${userName}')]/ancestor::adf-datatable-row//button[@title="Content actions"]`
+        )
+      ).click();
+    }
   }
 }
 
