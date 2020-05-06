@@ -63,4 +63,12 @@ export class TestFunction {
   ): Promise<string> {
     return await element(elem).getAttribute(attribute);
   }
+
+  /**
+   * Function to check If Element is Enabled
+   */
+
+  public async enabled(elem: Locator): Promise<boolean> {
+    return await element(elem).isEnabled();
+  }
 }

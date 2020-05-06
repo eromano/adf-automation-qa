@@ -17,7 +17,7 @@ Feature: Test Automation
         Then The username should be inputted in the Name field
         When User clicks on create button
         Then The Create new folder Dialog should not be displayed
-        And User should see the folder created for the inputed github username "siddharthsid"
+        And User should see the folder "created" for the inputed github username "siddharthsid"
         And User clicks on create new folder icon
         Then User should see the New Folder Dialog
         When User inputs the github username "siddharthsid"
@@ -28,3 +28,4 @@ Feature: Test Automation
         When User click on the Cancel button
         And User selects the action button for created username "siddharthsid"
         And User click on delete button to delete the username
+        Then User should see the folder "deleted" for the inputed github username "siddharthsid"

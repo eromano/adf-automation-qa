@@ -29,4 +29,9 @@ export class FilesPage {
   actionBtn = by.xpath(
     './/*[@title="name"]/ancestor::*[contains(@data-automation-id,"datatable-row")]//button[@aria-label="Actions"]'
   );
+  totalPageCount = by.xpath('.//*[@class="adf-pagination__total-pages"]');
+  currentPageCount = by.xpath(".//*[@class='adf-pagination__current-page']");
+  forwardArrowKey = by.xpath(".//*[text()='keyboard_arrow_right']");
+  previousArrowBtn = by.xpath('.//*[@aria-label="Previous page button"]');
+  nextArrowBtn = by.xpath('.//*[@aria-label="Next page button"]');
 }

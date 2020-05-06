@@ -5,6 +5,7 @@ import { LoginPage } from "../../pageObjects/loginPage";
 import { FilesPage } from "../../pageObjects/filesPage";
 import { expect } from "../../helpers/chai-imports";
 import { TestFunction } from "../../function/function";
+import { ActionType } from "../../function/enum";
 
 let settingsPage: SettingsPage = new SettingsPage();
 let loginPage: LoginPage = new LoginPage();
@@ -85,15 +86,34 @@ class TestSteps {
 
   @when(/^User selects the action button for created username "(.*)"$/)
   public async clickOnActionBtn(userName: string) {
-    let elm = await element.all(filesPage.dataTableRow);
-    for (let i = 0; i < elm.length; i++) {
-      let text: string[] = await elm[i].getText();
-      if (text.includes(userName)) {
+    while (await testFunction.enabled(filesPage.previousArrowBtn)) {
+      console.log("click on previous button");
+      let user = await this.getDisplayNameFromList();
+      if (user.includes(userName)) {
         console.log("Found the user");
         await element(
-          by.xpath(`(.//button[@title="Content actions"])[${i}]`)
+          by.xpath(
+            `.//*[contains(@data-automation-id,'${userName}')]/ancestor::adf-datatable-row//button[@title="Content actions"]`
+          )
         ).click();
+        break;
       }
+      await testFunction.click(filesPage.previousArrowBtn);
+    }
+
+    while (await testFunction.enabled(filesPage.nextArrowBtn)) {
+      console.log("click on next button");
+      let user = await this.getDisplayNameFromList();
+      if (user.includes(userName)) {
+        console.log("Found the user");
+        await element(
+          by.xpath(
+            `.//*[contains(@data-automation-id,'${userName}')]/ancestor::adf-datatable-row//button[@title="Content actions"]`
+          )
+        ).click();
+        break;
+      }
+      await testFunction.click(filesPage.nextArrowBtn);
     }
   }
 
@@ -120,17 +140,28 @@ class TestSteps {
   }
 
   @then(
-    /^User should see the folder created for the inputed github username "(.*)"$/
+    /^User should see the folder (.*) for the inputed github username "(.*)"$/
   )
-  public async verifyFolderCreated(userName: string) {
-    let elem = await element.all(filesPage.displayNameList);
+  public async verifyFolderCreated(action: ActionType, userName: string) {
+    let totalPageCount = await testFunction.text(filesPage.totalPageCount);
+    let getTotalPageCount: any = totalPageCount.split(" ")[1];
+    let currentPageCount = await testFunction.text(filesPage.currentPageCount);
+    let getCurrentPageCount: any = currentPageCount.split(" ")[1];
     let listOfValues: string[] = [];
 
-    for (const el of elem) {
-      const val = await el.getText();
-      listOfValues.push(val);
+    if (getTotalPageCount === getCurrentPageCount) {
+      listOfValues = await this.getDisplayNameFromList();
+    } else {
+      //Iterate through the page
+      for (let i: any = getCurrentPageCount; i < getTotalPageCount; i++) {
+        listOfValues = await this.getDisplayNameFromList();
+        await testFunction.click(filesPage.forwardArrowKey);
+      }
     }
-    expect(listOfValues).to.includes(userName);
+    if (action === ActionType.created) {
+      expect(listOfValues).to.include(userName);
+    } else if (action === ActionType.deleted)
+      expect(listOfValues).to.not.include(userName);
   }
 
   @then(/^User should see the validation error message$/)
@@ -139,6 +170,18 @@ class TestSteps {
     expect(errorMessage).to.be.equal(
       "There's already a folder with this name. Try a different name."
     );
+  }
+
+  // This Function retrives all the Display Name Present in the Page
+  public async getDisplayNameFromList(): Promise<string[]> {
+    await testFunction.waitForElementToBeDisplayed(filesPage.displayNameList);
+    let elem = await element.all(filesPage.displayNameList);
+    let listOfValues: string[] = [];
+    for (const el of elem) {
+      const val: any = await el.getText();
+      listOfValues.push(val);
+    }
+    return listOfValues;
   }
 }
 
